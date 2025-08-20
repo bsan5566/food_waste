@@ -14,7 +14,7 @@ def get_conn():
     conn.execute("PRAGMA foreign_keys = ON;")
     return conn
 
-# Create single global connection
+# create a global connection only once
 conn = get_conn()
 
 def run_query(query, params=()):
@@ -28,6 +28,7 @@ def run_exec(query, params=()):
     with closing(conn.cursor()) as cur:
         cur.execute(query, params)
         conn.commit()
+
 
 
 # ---------- UI helpers ----------
