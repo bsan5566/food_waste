@@ -10,11 +10,12 @@ st.set_page_config(page_title="Local Food Wastage Management", page_icon="🥗",
 # ---------- DB helpers ----------
 @st.cache_resource
 def get_conn():
-    conn = sqlite3.connect("food_waste.db", check_same_thread=False)
+    import os
+    DB_PATH = os.path.join(os.path.dirname(__file__), "food_waste.db")
+    conn = sqlite3.connect(DB_PATH, check_same_thread=False)
     conn.execute("PRAGMA foreign_keys = ON;")
     return conn
 
-# create a global connection only once
 conn = get_conn()
 
 def run_query(query, params=()):
