@@ -14,17 +14,21 @@ def get_conn():
     conn.execute("PRAGMA foreign_keys = ON;")
     return conn
 
+# Create single global connection
+conn = get_conn()
+
 def run_query(query, params=()):
-    with closing(get_conn().cursor()) as cur:
+    with closing(conn.cursor()) as cur:
         cur.execute(query, params)
         rows = cur.fetchall()
         cols = [d[0] for d in cur.description] if cur.description else []
     return pd.DataFrame(rows, columns=cols)
 
 def run_exec(query, params=()):
-    with closing(get_conn().cursor()) as cur:
+    with closing(conn.cursor()) as cur:
         cur.execute(query, params)
-        get_conn().commit()
+        conn.commit()
+
 
 # ---------- UI helpers ----------
 def multiselect_or_all(label, options):
